@@ -1,19 +1,21 @@
 1. Membros:
-    Thomas Barlavento Duarte @TBDcesar
-    Lucas Bezerra Lima @lblima038
-    Arllesson Gomes da Silva @arllekws
+<ul>
+        <li>Thomas Barlavento Duarte @TBDcesar</li>
+        <li>Lucas Bezerra Lima @lblima038</li>
+        <li>Arllesson Gomes da Silva @arllekws</li>
+</ul>
 
-2. Disciplina:
+3. Disciplina:
     Programação imperativa e funcional - 2024.2
 
-3. Instituição de ensino:
+4. Instituição de ensino:
     CESAR School
 
-4. Nome do jogo:
+5. Nome do jogo:
     Dungeon Echoes
 
-5. Compilação:
+6. Compilação:
     Uso de structs para personagens e monstros, funções para combate e exploração, e alocação dinamica para gerar novos monstros enquanto o jogador avança na masmorra.
 
-6. Descrição:
+7. Descrição:
     O jogador explora uma masmorra infestada de monstros, armadilhas e tesouros. A cada nivel o desafio almenta, e o jogador deve lutar contra inimigos e usar os tesouros encontrados para melhorar suas chances de sobreviver.
