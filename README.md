@@ -17,6 +17,9 @@ Este projeto consiste em um jogo da cobrinha com jogabilidade simples e clássic
 - 🕹️ Controle da cobra usando as setas do teclado.
 - 🍎 A cobra cresce ao coletar frutas e aumenta a pontuação.
 - 💥 Encerramento do jogo ao colidir com as bordas ou o próprio corpo.
+
+## Link do trello
+- [Trello](https://trello.com/b/XoDjBubc/planejamento-projeto-pif)
 <br>
 
 # cli-lib
