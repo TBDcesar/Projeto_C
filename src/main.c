@@ -1,46 +1,39 @@
-/**
- * main.h
- * Created on Aug, 23th 2023
- * Author: Tiago Barros
- * Based on "From C to C++ course - 2002"
-*/
-
 #include <string.h>
+#include <stdlib.h>
 
 #include "screen.h"
 #include "keyboard.h"
 #include "timer.h"
 
-int x = 34, y = 12;
-int incX = 1, incY = 1;
+int x = 34, y = 12;  // Coordenadas iniciais
 
 void printHello(int nextX, int nextY)
 {
     screenSetColor(CYAN, DARKGRAY);
     screenGotoxy(x, y);
-    printf("           ");
+    printf("        ");
     x = nextX;
     y = nextY;
     screenGotoxy(x, y);
-    printf("Hello World");
+    printf("-===o");
 }
 
-void printKey(int ch)
+void moveMessage( int ch)
 {
-    screenSetColor(YELLOW, DARKGRAY);
-    screenGotoxy(35, 22);
-    printf("Key code :");
-
-    screenGotoxy(34, 23);
-    printf("            ");
-    
-    if (ch == 27) screenGotoxy(36, 23);
-    else screenGotoxy(39, 23);
-
-    printf("%d ", ch);
-    while (keyhit())
+    switch (ch)
     {
-        printf("%d ", readch());
+        case 'w':  // Move up
+            if (y > MINY + 1) printHello(x, y--);
+            break;
+        case 's':  // Move down
+            if (y < MAXY - 1) printHello(x, y++);
+            break;
+        case 'a':  // Move left
+            if (x > MINX + 1) printHello(x--, y); 
+            break;
+        case 'd':  // Move right
+            if (x < MAXX - strlen("-===o") - 1) printHello(x++, y);  
+            break;
     }
 }
 
@@ -51,32 +44,21 @@ int main()
     screenInit(1);
     keyboardInit();
     timerInit(50);
-
     printHello(x, y);
     screenUpdate();
 
-    while (ch != 10) //enter
+    while (ch != 10) // Enter key (10 = Enter)
     {
-        // Handle user input
+        // Verifica se uma tecla foi pressionada
         if (keyhit()) 
         {
             ch = readch();
-            printKey(ch);
-            screenUpdate();
-        }
-
-        // Update game state (move elements, verify collision, etc)
-        if (timerTimeOver() == 1)
-        {
-            int newX = x + incX;
-            if (newX >= (MAXX -strlen("Hello World") -1) || newX <= MINX+1) incX = -incX;
-            int newY = y + incY;
-            if (newY >= MAXY-1 || newY <= MINY+1) incY = -incY;
-
-            printKey(ch);
-            printHello(newX, newY);
-
-            screenUpdate();
+            //if (ch == 'w' || ch == 'a' || ch == 's' || ch == 'd')
+            
+                printHello(x, y--);
+                moveMessage(ch);  // Mover a mensagem com as teclas WASD
+                screenUpdate();  // Atualiza a tela para refletir as mudanças
+            
         }
     }
 
