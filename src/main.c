@@ -1,41 +1,65 @@
 #include <string.h>
 #include <stdlib.h>
-#include <unistd.h>
+#include <unistd.h> // Para usar a função usleep()
 
 #include "screen.h"
 #include "keyboard.h"
 #include "timer.h"
 
-int x = 34, y = 12;      // Coordenadas iniciais
-char direction = 'd';    // Direção inicial: 'd' (direita)
+#define MAX_LENGTH 1000  // Comprimento máximo da cobrinha
 
-void printSnake(int nextX, int nextY)
+typedef struct {
+    int x, y;
+} Segmento;
+
+Segmento snake[MAX_LENGTH];  // Array para os segmentos da cobrinha
+int comprimento = 10;             // Comprimento inicial da cobrinha
+char direcao = 'd';       // Direção inicial: 'd' (direita)
+
+void initializeSnake()
 {
-    screenSetColor(CYAN, DARKGRAY);
-    screenGotoxy(x, y);
-    printf("     "); // Apaga a posição anterior da cobrinha
-    x = nextX;
-    y = nextY;
-    screenGotoxy(x, y);
-    printf("0000O"); // Corpo da cobrinha atualizado
+    // Define a posição inicial da cabeça e do corpo da cobrinha
+    for (int i = 0; i < comprimento; i++) {
+        snake[i].x = 34 - i;  // Inicia com a cabeça na posição (34, 12) e o corpo à esquerda
+        snake[i].y = 12;
+    }
 }
 
-void moveMessage()
+void drawSnake()
 {
-    switch (direction)
-    {
-        case 'w':  // Mover para cima
-            if (y > MINY + 1) printSnake(x, y - 1);
-            break;
-        case 's':  // Mover para baixo
-            if (y < MAXY - 1) printSnake(x, y + 1);
-            break;
-        case 'a':  // Mover para a esquerda
-            if (x > MINX + 1) printSnake(x - 1, y); 
-            break;
-        case 'd':  // Mover para a direita
-            if (x < MAXX - 5) printSnake(x + 1, y); // Ajusta para caber o comprimento da cobrinha
-            break;
+    screenSetColor(CYAN, DARKGRAY);
+    
+    // Desenha cada segmentoo da cobrinha
+    for (int i = 0; i < comprimento; i++) {
+        screenGotoxy(snake[i].x, snake[i].y);
+        printf(i == 0 ? "O" : "0");  // Cabeça ("O") e corpo ("0")
+    }
+}
+
+void clearTail()
+{
+    // Apaga o último segmentoo da cobrinha
+    screenGotoxy(snake[comprimento - 1].x, snake[comprimento - 1].y);
+    printf(" ");
+}
+
+void moveSnake()
+{
+    // Atualiza os segmentos da cobrinha, movendo cada um para a posição do anterior
+    for (int i = comprimento - 1; i > 0; i--) {
+        snake[i] = snake[i - 1];
+    }
+
+    // Move a cabeça da cobrinha na direção atual
+    switch (direcao) {
+        case 'w':
+         snake[0].y -= 1; break; // Para cima
+        case 's':
+         snake[0].y += 1; break; // Para baixo
+        case 'a':
+         snake[0].x -= 1; break; // Para esquerda
+        case 'd':
+         snake[0].x += 1; break; // Para direita
     }
 }
 
@@ -46,30 +70,35 @@ int main()
     screenInit(1);
     keyboardInit();
     timerInit(50);
-    printSnake(x, y);
+    initializeSnake();
+    drawSnake();
     screenUpdate();
 
     while (ch != 10) // Tecla Enter (10 = Enter)
     {
-        // Verifica se uma tecla foi pressionada
+      if(snake[0].x < MAXX || snake[0].x > MINX || snake[0].y < MAXY || snake[0].y > MINY){ // Verifica se uma tecla foi pressionada
         if (keyhit()) 
         {
             ch = readch();
             // Muda a direção com base na tecla pressionada
-            if (ch == 'w' || ch == 'a' || ch == 's' || ch == 'd') 
+            if ((ch == 'w') || (ch == 's') || (ch == 'a') || (ch =='d')) 
             {
-                direction = ch;
+                direcao = ch;
             }
         }
 
-        moveMessage();    // Move a cobrinha na direção atual
-        screenUpdate();   // Atualiza a tela para refletir as mudanças
-        usleep(100000);   // Pausa para controlar a velocidade (100ms)
+        clearTail();    // Apaga o último segmentoo
+        moveSnake();    // Move a cobrinha na direção atual
+        drawSnake();    // Redesenha a cobrinha
+        screenUpdate(); // Atualiza a tela para refletir as mudanças
+        usleep(100000); // Pausa para controlar a velocidade (100ms)
+        }
+      else {break;}
     }
-
     keyboardDestroy();
     screenDestroy();
     timerDestroy();
+    
 
     return 0;
 }
