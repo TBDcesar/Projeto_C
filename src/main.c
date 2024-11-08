@@ -84,7 +84,7 @@ int main()
         {
             ch = readch();
             // Muda a direção com base na tecla pressionada
-            if ((ch == 'w') || (ch == 's') || (ch == 'a') || (ch =='d')) 
+            if ((ch == 'w' && direcao != 's') || (ch == 's' && direcao != 'w') || (ch == 'a' && direcao != 'd') || (ch =='d' && direcao != 'a')) 
             {
                 direcao = ch;
             }
