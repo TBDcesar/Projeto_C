@@ -76,7 +76,10 @@ int main()
 
     while (ch != 10) // Tecla Enter (10 = Enter)
     {
-      if(snake[0].x < MAXX || snake[0].x > MINX || snake[0].y < MAXY || snake[0].y > MINY){ // Verifica se uma tecla foi pressionada
+        if (snake[0].x <= MINX || snake[0].x >= MAXX || snake[0].y <= MINY || snake[0].y >= MAXY) {
+            break;  // Encerra o jogo ao bater na borda
+        }
+        // Verifica se uma tecla foi pressionada
         if (keyhit()) 
         {
             ch = readch();
@@ -92,8 +95,6 @@ int main()
         drawSnake();    // Redesenha a cobrinha
         screenUpdate(); // Atualiza a tela para refletir as mudanças
         usleep(100000); // Pausa para controlar a velocidade (100ms)
-        }
-      else {break;}
     }
     keyboardDestroy();
     screenDestroy();
