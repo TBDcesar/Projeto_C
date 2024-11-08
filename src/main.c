@@ -11,28 +11,28 @@ void printHello(int nextX, int nextY)
 {
     screenSetColor(CYAN, DARKGRAY);
     screenGotoxy(x, y);
-    printf("        ");
+    printf("     "); // Apaga a posição anterior da cobrinha
     x = nextX;
     y = nextY;
     screenGotoxy(x, y);
-    printf("-===o");
+    printf("0000O"); // Corpo da cobrinha atualizado
 }
 
-void moveMessage( int ch)
+void moveMessage(int ch)
 {
     switch (ch)
     {
-        case 'w':  // Move up
-            if (y > MINY + 1) printHello(x, y--);
+        case 'w':  // Move para cima
+            if (y > MINY + 1) printHello(x, y - 1);
             break;
-        case 's':  // Move down
-            if (y < MAXY - 1) printHello(x, y++);
+        case 's':  // Move para baixo
+            if (y < MAXY - 1) printHello(x, y + 1);
             break;
-        case 'a':  // Move left
-            if (x > MINX + 1) printHello(x--, y); 
+        case 'a':  // Move para a esquerda
+            if (x > MINX + 1) printHello(x - 1, y); 
             break;
-        case 'd':  // Move right
-            if (x < MAXX - strlen("-===o") - 1) printHello(x++, y);  
+        case 'd':  // Move para a direita
+            if (x < MAXX - 5) printHello(x + 1, y); // Ajusta para caber o comprimento da cobrinha
             break;
     }
 }
@@ -47,18 +47,14 @@ int main()
     printHello(x, y);
     screenUpdate();
 
-    while (ch != 10) // Enter key (10 = Enter)
+    while (ch != 10) // Tecla Enter (10 = Enter)
     {
         // Verifica se uma tecla foi pressionada
         if (keyhit()) 
         {
             ch = readch();
-            //if (ch == 'w' || ch == 'a' || ch == 's' || ch == 'd')
-            
-                printHello(x, y--);
-                moveMessage(ch);  // Mover a mensagem com as teclas WASD
-                screenUpdate();  // Atualiza a tela para refletir as mudanças
-            
+            moveMessage(ch);  // Mover a cobrinha com as teclas WASD
+            screenUpdate();  // Atualiza a tela para refletir as mudanças
         }
     }
 
