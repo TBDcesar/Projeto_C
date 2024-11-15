@@ -55,7 +55,7 @@ void marcandoPontos() {
 }
 
 void drawSnake() {
-    screenSetColor(CYAN, DARKGRAY);
+    screenSetColor(GREEN, DARKGRAY);
     
     // Desenha cada segmento da cobrinha
     for (int i = 0; i < comprimento; i++) {
@@ -83,6 +83,15 @@ void moveSnake() {
         case 'a': snake[0].x -= 1; break; // Para esquerda
         case 'd': snake[0].x += 1; break; // Para direita
     }
+}
+
+int colisaoCobra(){
+    for (int i = 1; i < comprimento; i++) {
+        if (snake[0].x == snake[i].x && snake[0].y == snake[i].y) {
+            return 1;  // Colisão detectada
+        }
+    }
+    return 0;
 }
 
 void exibirMenu() {
@@ -145,6 +154,8 @@ int selecionarOpcaoMenu() {
 
 void iniciarJogo() {
     int ch = 0;
+    gameOver = 0;
+    pontos = 0;
     jogoEmExecucao = 1;
     initializeSnake();
     drawSnake();
@@ -155,7 +166,7 @@ void iniciarJogo() {
 
     while (jogoEmExecucao && ch != 10) // Tecla Enter (10 = Enter)
     {
-        if (snake[0].x <= MINX || snake[0].x >= MAXX || snake[0].y <= MINY || snake[0].y >= MAXY) {
+        if (snake[0].x <= MINX || snake[0].x >= MAXX || snake[0].y <= MINY || snake[0].y >= MAXY || colisaoCobra()) {
             gameOver = 1;  // Marca o jogo como encerrado
             break;
         }
