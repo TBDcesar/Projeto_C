@@ -13,17 +13,44 @@ typedef struct {
 } Segmento;
 
 Segmento snake[MAX_LENGTH];  // Array para os segmentos da cobrinha
-
-int comprimento = 10;        // Comprimento inicial da cobrinha
+Segmento fruta;
+int comprimento = 5;        // Comprimento inicial da cobrinha
 char direcao = 'd';          // Direção inicial: 'd' (direita)
 int jogoEmExecucao = 0;      // Variável de controle para iniciar ou sair do jogo
 int gameOver = 0;
+int pontos = 0;
+
+void exibirPontuacao() {
+    screenSetColor(YELLOW, DARKGRAY);
+    screenGotoxy(MINX, MINY - 2); // Exibe um pouco acima do campo de jogo
+    printf("Pontuacao: %d", pontos);
+}
 
 void initializeSnake() {
     // Define a posição inicial da cabeça e do corpo da cobrinha
     for (int i = 0; i < comprimento; i++) {
         snake[i].x = 34 - i;  // Inicia com a cabeça na posição (34, 12) e o corpo à esquerda
         snake[i].y = 12;
+    }
+}
+
+void gerarFruta(){
+    fruta.x = MINX + 1 + rand() % (MAXX - MINX - 2);
+    fruta.y = MINY + 1 + rand() % (MAXY - MINY - 2);
+}
+
+void drawFruit() {
+    screenSetColor(RED, DARKGRAY);
+    screenGotoxy(fruta.x, fruta.y);
+    printf("@");
+}
+
+void marcandoPontos() {
+    if (snake[0].x == fruta.x && snake[0].y == fruta.y) {
+        pontos++;
+        comprimento++;  // Aumenta o comprimento da cobrinha
+        gerarFruta();
+        drawFruit();  // Gera uma nova posição para a fruta
     }
 }
 
@@ -121,6 +148,9 @@ void iniciarJogo() {
     jogoEmExecucao = 1;
     initializeSnake();
     drawSnake();
+    exibirPontuacao();
+    gerarFruta();
+    drawFruit();
     screenUpdate();
 
     while (jogoEmExecucao && ch != 10) // Tecla Enter (10 = Enter)
@@ -137,12 +167,12 @@ void iniciarJogo() {
                 direcao = ch;
             }
         }
-
+        marcandoPontos();
         clearTail();    // Apaga o último segmento
         moveSnake();    // Move a cobrinha na direção atual
         drawSnake();    // Redesenha a cobrinha
         screenUpdate(); // Atualiza a tela para refletir as mudanças
-        usleep(100000); // Pausa para controlar a velocidade (100ms)
+        usleep(100000);// Pausa para controlar a velocidade (100ms)
     }
 }
 
@@ -150,17 +180,17 @@ int main() {
 
     exibirMenu();
     int opcao = selecionarOpcaoMenu();
-    while (opcao!=2){
-        if (opcao == 1) {
-            screenInit(1);
-            keyboardInit();
-            timerInit(50);
-            iniciarJogo();
-            screenUpdate();
-            if (gameOver) {
-                opcao=2; // Sai do loop principal para encerrar o jogo
-            }
-        }
+    
+    if (opcao == 1) {
+        screenInit(1);
+        keyboardInit();
+        timerInit(50);
+        iniciarJogo();
+        screenUpdate();
+        
+    }
+    if (gameOver){
+        printf("Você Perdeu!");  
     }
 
     keyboardDestroy();
