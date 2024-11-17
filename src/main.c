@@ -14,7 +14,7 @@ typedef struct {
 
 Segmento snake[MAX_LENGTH];  // Array para os segmentos da cobrinha
 Segmento fruta;
-int comprimento = 5;        // Comprimento inicial da cobrinha
+int comprimento = 4;        // Comprimento inicial da cobrinha
 char direcao = 'd';          // Direção inicial: 'd' (direita)
 int jogoEmExecucao = 0;      // Variável de controle para iniciar ou sair do jogo
 int gameOver = 0;
@@ -159,7 +159,7 @@ void iniciarJogo() {
     jogoEmExecucao = 1;
     initializeSnake();
     drawSnake();
-    exibirPontuacao();
+    
     gerarFruta();
     drawFruit();
     screenUpdate();
@@ -179,6 +179,7 @@ void iniciarJogo() {
             }
         }
         marcandoPontos();
+        exibirPontuacao();
         clearTail();    // Apaga o último segmento
         moveSnake();    // Move a cobrinha na direção atual
         drawSnake();    // Redesenha a cobrinha
