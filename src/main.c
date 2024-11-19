@@ -126,32 +126,6 @@ int selecionarOpcaoMenu() {
     }
 }
 
-//void screenGameOver(){
-    //screenClear();
-    //screenSetColor(YELLOW, DARKGRAY);
-
-    //screenGotoxy(20, 8);
-    //printf("============== GAME OVER! ==============");
-
-    //screenGotoxy(25, 12);
-    //printf("1. Reiniciar o jogo?");
-    //screenGotoxy(25, 14);
-    //printf("2. Sair");
-    //screenUpdate();
-//}
-
-//int opcaoGameOver(){
-    //int opcao = 0;
-    //if (keyhit()){
-        //char ch = readch();
-            //if (ch == '1') {
-                //return 1;  // Reiniciar jogo
-            //} else if (ch == '2') {
-                //return 2;  // Sair
-            //}
-    //}    
-//}
-
 void iniciarJogo() {
     int ch = 0;
     gameOver = 0;
@@ -159,14 +133,13 @@ void iniciarJogo() {
     jogoEmExecucao = 1;
     initializeSnake();
     drawSnake();
-    
     gerarFruta();
     drawFruit();
     screenUpdate();
 
     while (jogoEmExecucao && ch != 10) // Tecla Enter (10 = Enter)
     {
-        if (snake[0].x <= MINX || snake[0].x >= MAXX || snake[0].y <= MINY || snake[0].y >= MAXY || colisaoCobra()) {
+        if (snake[0].x == MINX || snake[0].x == MAXX || snake[0].y == MINY || snake[0].y == MAXY || colisaoCobra()) {
             gameOver = 1;  // Marca o jogo como encerrado
             break;
         }
